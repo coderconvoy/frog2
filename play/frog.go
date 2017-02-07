@@ -1,10 +1,11 @@
 package play
 
 import (
+	"image/color"
+
 	"engo.io/ecs"
 	"engo.io/engo"
 	"engo.io/engo/common"
-	"image/color"
 )
 
 type Frog struct {

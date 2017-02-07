@@ -1,9 +1,10 @@
 package play
 
 import (
+	"image/color"
+
 	"engo.io/ecs"
 	"engo.io/engo/common"
-	"image/color"
 )
 
 type PlayScene struct {
@@ -15,11 +16,19 @@ func (*PlayScene) Preload() {}
 
 func (*PlayScene) Setup(w *ecs.World) {
 	common.SetBackground(color.White)
-	rs := &common.RenderSystem{}
+
+	systems := &SysList{
+		RenderSys:   &common.RenderSystem{},
+		MovementSys: &MovementSystem{},
+	}
+
+	spawnSys := &SpawnSystem{Systems: systems}
 
 	fg := NewFrog()
-	rs.Add(&fg.BasicEntity, &fg.RenderComponent, &fg.SpaceComponent)
+	systems.RenderSys.AddByInterface(fg)
 
-	w.AddSystem(rs)
+	w.AddSystem(systems.RenderSys)
+	w.AddSystem(systems.MovementSys)
+	w.AddSystem(spawnSys)
 
 }
